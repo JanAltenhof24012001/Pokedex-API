@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    min-height: 112px;
+    background-color: #082029;
+}
+
+main {
+    display: flex;
+    flex: 1;
+    background-color: #05171E;
+}
+
+.pokemon-container {
+    background-color: #082128;
+    height: 250px;
+    margin: 20px;
+    border-radius: 15px;
+}
+
+footer {
+    min-height: 112px;
+    background-color: #082029;
+}
