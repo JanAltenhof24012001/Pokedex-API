@@ -17,7 +17,7 @@ async function getData() {
             "name": responseAsJson.name,
             "id": responseAsJson.id,
             "types": getTypeData(responseAsJson),
-            "type_sprite": getTypeSpriteData(responseAsJson)
+            "type_sprite": await getTypeSpriteData(responseAsJson)
         })
         pokemonImages.push(responseAsJson.sprites.front_default)
     }
@@ -54,10 +54,11 @@ function renderTypeSprites(i) {
     
     for (let typeIndex = 0; typeIndex < pokemonDB[i].types.length; typeIndex++) {
         if (pokemonDB[i].types.length == 2) {
-            return `<img src="${pokemonDB[i].type_sprite[0]}" alt="Bild">
-                    <img src="${pokemonDB[i].type_sprite[1]}" alt="Bild">`
+            return `<img class="type-image" src="${pokemonDB[i].type_sprite[0]}" alt="Bild">
+                    <img class="type-image" src="${pokemonDB[i].type_sprite[1]}" alt="Bild">`
         } else if (pokemonDB[i].types.length == 1) {
-            return `<img src="${pokemonDB[i].type_sprite}" alt="Bild">`
+            return `<img class="type-image" src="${pokemonDB[i].type_sprite}" alt="Bild">`
         }
     }
 }
+
