@@ -14,11 +14,14 @@ main {
     display: flex;
     flex: 1;
     background-color: #05171E;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .pokemon-container {
     background-color: #082128;
     height: 250px;
+    width: 200px;
     margin: 20px;
     border-radius: 15px;
 }
