@@ -3,23 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Pokedex-API</title>
+    <link rel="stylesheet" href="./style/style.css">
+    <link rel="stylesheet" href="./style/background-color.css">
+    <link rel="icon" type="image/x-icon" href="./img/pokemon-3418266_640.png">
 </head>
-<body onload="init()">
+<body onload="init()" id="body">
     <header>
-
+        <div class="display-flex">
+            <img class="logo-img" src="./img/pokemon-3418266_640.png" alt="Logo">
+            <h1>Pokedex API</h1>
+        </div>
+        <div class="display-flex">
+            <form onsubmit="pokemonFilter(event)">
+                <input type="text" id="searchbar" placeholder="Enter atleast 3 Characters" pattern="[A-Za-z]{3,}" title="Atleast 3 Letters">
+                <button class="filter-button">Filter</button>
+            </form>
+            <button class="filter-button" onclick="renderSmallCards()">Clear Filter</button>
+        </div>
     </header>
 
-    <main id="pokedex">
-       
+    <main id="main">
+        <div class="main-content-limit">
+            <div id="pokedex-card-container" class="pokedex-card-container">
+
+            </div>
+            <div class="more-pokemon-container" id="more-pokemon-container">
+
+            </div>
+            <dialog id="pokemon-dialog">
+        
+            </dialog>
+        </div>
     </main>
 
     <footer>
-
+        <p>© 2025 Jan Altenhof</p>
     </footer>
 </body>
-<script src="script.js"></script>
-<script src="db.js"></script>
-<script src="template.js"></script>
+<script src="./script/script.js"></script>
+<script src="./script/db.js"></script>
+<script src="./script/template.js"></script>
 </html>
