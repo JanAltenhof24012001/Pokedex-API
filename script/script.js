@@ -84,11 +84,11 @@ async function loadMorePokemon(amount) {
     MORE_POKEMON_CONTAINER_REF.innerHTML = "";
     limit = limit + amount // increase limit by 20 or 100
     await init()
-    scrollToLastSeenPokemon();
+    scrollToLastSeenPokemon(amount);
 }
 
 // scrolls to the last pokemon card before the increase
-function scrollToLastSeenPokemon() {
+function scrollToLastSeenPokemon(amount) {
     if (amount == 20) {
         const target = document.getElementById(`scrolltarget${limit - 1}`);
         const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
@@ -108,17 +108,16 @@ function scrollToLastSeenPokemon() {
 
 // opens the dialog of the selected pokemon
 async function openPokemonDialog(pokemonID) {
-    if (pokemonID == -1) { // prevents you from going into minus when switching between pokemon in dialog
-        
-    } else if (pokemonID == limit + 19) { // prevents you from going over the limit when switching between pokemon in dialog
-        
-    } else {
-        await getSpecificData(pokemonID);
-        DIALOG_REF.showModal();
-        BODY_REF.classList.add('no-scroll') // adds class to the body to prevent scrolling while dialog is open
-        renderDialog(pokemonID);
-        loadStats(pokemonID)
+    if (pokemonID == -1) { // loops to the other end when going beneath 1
+        pokemonID = pokemonDB.length - 1
+    } else if (pokemonID == limit + 19) { // loops to the other end when going above the current limit
+        pokemonID = 0
     }
+    await getSpecificData(pokemonID);
+    DIALOG_REF.showModal();
+    BODY_REF.classList.add('no-scroll') // adds class to the body to prevent scrolling while dialog is open
+    renderDialog(pokemonID);
+    loadStats(pokemonID)
 }
 
 // fetches the stats data and the pokemon cry of the selected pokemon 
