@@ -6,14 +6,31 @@ const SEARCHBAR = document.getElementById('searchbar');
 const MORE_POKEMON_CONTAINER_REF = document.getElementById('more-pokemon-container');
 const BODY_REF = document.getElementById('body');
 
+let pokemonDB = [];
+
+let currentPokemonDB = [];
+
+let allTypeSprites = {};
+
+
 let currentPokemonIndex = 1
 let limit = 1 // Max amount of pokemon per loading
 
 async function init() {
     loadingGif();
+    await getAllTypeSprites()
     await getData();
     currentPokemonDB = pokemonDB;
     renderSmallCards();
+}
+
+// fetches all type sprites and pushes them into allTypeSprites
+async function getAllTypeSprites() {
+    for (let i = 1; i < 19; i++) {
+        let response = await fetch(`https://pokeapi.co/api/v2/type/${i}/`);
+        let responseAsJson = await response.json();
+        allTypeSprites[responseAsJson.name] = responseAsJson.sprites["generation-viii"]["sword-shield"]["name_icon"];
+    }
 }
 
 // Loading gif while data is getting fetched
@@ -31,7 +48,7 @@ async function getData() {
             "id": responseAsJson.id,
             "pokemon_image": responseAsJson.sprites.front_default,
             "types": getTypeData(responseAsJson),
-            "type_sprite": await getTypeSpriteData(responseAsJson),
+            "type_sprite": getTypeSpriteData(responseAsJson),                                             
             "stats": [],
             "pokemon_cry": []
         })
@@ -47,13 +64,12 @@ function getTypeData(responseAsJson) {
     return Types
 }
 
-// pushing correct Type sprite into pokemonDB
-async function getTypeSpriteData(responseAsJson) {
+// pushes correct type sprite into pokemonDB
+function getTypeSpriteData(responseAsJson) {
     let TypeSprites = []
     for (let i = 0; i < responseAsJson.types.length; i++) {
-        let spriteResponse = await fetch(responseAsJson.types[i].type.url);
-        let spriteResponseAsJson = await spriteResponse.json();
-        TypeSprites.push(spriteResponseAsJson.sprites["generation-viii"]["sword-shield"]["name_icon"])
+        let typeName = responseAsJson.types[i].type.name 
+        TypeSprites.push(allTypeSprites[typeName])
     }
     return TypeSprites
 }
@@ -83,7 +99,10 @@ function renderTypeSprites(i) {
 async function loadMorePokemon(amount) {
     MORE_POKEMON_CONTAINER_REF.innerHTML = "";
     limit = limit + amount // increase limit by 20 or 100
-    await init()
+    loadingGif();
+    await getData();
+    currentPokemonDB = pokemonDB;
+    renderSmallCards();
     scrollToLastSeenPokemon(amount);
 }
 
@@ -113,7 +132,9 @@ async function openPokemonDialog(pokemonID) {
     } else if (pokemonID == limit + 19) { // loops to the other end when going above the current limit
         pokemonID = 0
     }
-    await getSpecificData(pokemonID);
+    if (pokemonDB[pokemonID].stats.length == 0) { // if specific data is already loaded for the pokemon --> skip
+        await getSpecificData(pokemonID);
+    }
     DIALOG_REF.showModal();
     BODY_REF.classList.add('no-scroll') // adds class to the body to prevent scrolling while dialog is open
     renderDialog(pokemonID);

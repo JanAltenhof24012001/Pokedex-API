@@ -1,5 +1,0 @@
-let pokemonDB = []
-
-let currentPokemonDB = []
-
-
